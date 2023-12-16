@@ -1,0 +1,22 @@
+<div class="layout">
+  <nz-layout>
+    <nz-header>
+      <div class="logo">The Best Games</div>
+      <ul nz-menu nzTheme="dark" nzMode="inline" nzMode="horizontal">
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/layout/list">Game Toplist</a>
+        </li>
+      </ul>
+      <span class="right-top-tool"
+        >{{ username
+        }}<span routerLink="/login" class="sign">sign out</span></span
+      >
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+    <nz-footer>The Best Games ©2023 Implement By ABC</nz-footer>
+  </nz-layout>
+</div>

@@ -1,0 +1,36 @@
+.song-title {
+  text-align: center;
+  font-weight: bolder;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+}
+.song-info {
+  display: flex;
+  text-align: left;
+}
+.song-info-basic {
+  padding: 40px 0;
+  margin-left: 20px;
+  .detail-item-title {
+    color: #666;
+    font-weight: bold;
+  }
+}
+.song-info-basic > div {
+  line-height: 26px;
+}
+.title {
+  font-weight: bold;
+  font-size: 24px;
+  margin: 8px 0;
+}
+.song-info-basic > div {
+  &:first-child {
+    color: #000;
+    font-weight: bold;
+    font-size: 24px;
+  }
+  font-size: 16px;
+  color: #333;
+}
