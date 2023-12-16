@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ApiService {
-  _baseUrl = 'http://127.0.0.1:5000/api/wegame/';
+  _baseUrl = '/api/';
 
   constructor(private httpClient: HttpClient) {}
 
