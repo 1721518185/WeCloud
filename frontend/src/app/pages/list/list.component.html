@@ -39,7 +39,7 @@
         (click)="isVisible = true"
         style="margin-left: 15px"
       >
-        <i nz-icon nzType="plus" nzTheme="outline"></i>Add
+        <i nz-icon nzType="plus" nzTheme="outline"></i>Add Medias
       </button>
     </div>
   </div>
@@ -60,7 +60,7 @@
                 text-decoration: underline;
               "
               (click)="toDetail(item)"
-              >{{ item.Name }}</a
+            >{{ item.Name }}</a
             >
             <span>{{ item.Developer }}</span>
           </nz-list-item-meta-title>
@@ -118,24 +118,35 @@
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="addForm">
       <div nz-row [nzGutter]="24">
-        <div nz-col [nzSpan]="24" *ngFor="let field of addField">
+
           <nz-form-item>
             <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name"
-              >{{ field.label }}
+            >Name
             </nz-form-label>
             <nz-form-control
               [nzSm]="14"
               [nzXs]="24"
-              [nzErrorTip]="'Please input ' + field.label!"
+              [nzErrorTip]="'Please select a name'"
             >
-              <input
+              <nz-select
                 nz-input
-                [formControlName]="field.value"
+                [formControlName]="addField[0].value"
                 id="name"
-                [placeholder]="field.label"
-              />
+                [nzPlaceHolder]="addField[0].value"
+                nzShowSearch
+              >
+                <nz-option
+                  *ngFor="let name of getNamesFromLocalStorage()"
+                  [nzValue]="name"
+                  [nzLabel]="name"
+                ></nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
+
+            <!-- Insert the FileUploadComponent -->
+        <div nz-col [nzSpan]="24">
+          <app-file-upload></app-file-upload>
         </div>
       </div>
     </form>

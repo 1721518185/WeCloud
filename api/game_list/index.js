@@ -12,6 +12,7 @@ module.exports = async function (context, req) {
         const body = req.body || {};
         const page = body.page || 1;
         const size = body.size || 10;
+        const columns = body.columns || false;
 
         let query_conditions = {};
         ["Name", "Developer", "Distributer"].forEach(key => {
@@ -23,10 +24,17 @@ module.exports = async function (context, req) {
         context.log(query_conditions);
         const data = await collection.find(query_conditions).skip((page - 1) * size).limit(size).toArray();
         const total = await collection.countDocuments(query_conditions);
-        context.res = {
+        let response = {
             status: 200,
             body: { code: 200, total: total, data: data, msg: "SUCCESS" }
         };
+
+        if (columns) {
+            const names = await collection.distinct('Name');
+            response.body.names = names;
+        }
+
+        context.res = response;
     } catch (e) {
         context.res = {
             status: 500,

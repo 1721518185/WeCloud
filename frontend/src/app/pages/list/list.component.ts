@@ -108,9 +108,12 @@ export class ListComponent implements OnInit {
       Distributer: [null],
       Developer: [null],
     });
-    this.getWegameList();
+    this.getWegameList(true);
   }
 
+  getNamesFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('names') || '[]');
+  }
   submitForm(): void {
     if (this.addForm.valid) {
       let params = { ...this.addForm.value };
@@ -152,16 +155,17 @@ export class ListComponent implements OnInit {
     return [total, positive];
   }
 
-  getWegameList() {
+  getWegameList(columns:boolean = false) {
     let params = {
       page: this.page,
       size: this.size,
+      columns: columns,
       ...this.searchForm.value,
     };
     this.apiService.post('game_list', params).subscribe(
       (res: any) => {
         this.loading = false;
-        const { code, data, total } = res;
+        const { code, data, total, names } = res;
         if (code == 200) {
           this.loading = false;
           this.wegameList = data;
@@ -176,6 +180,9 @@ export class ListComponent implements OnInit {
           });
           this.total = total;
           console.log('this.wegameList', this.wegameList);
+          if (names) {
+            localStorage.setItem('names', JSON.stringify(names));
+          }
         } else {
           this.wegameList = [];
         }

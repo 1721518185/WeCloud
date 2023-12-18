@@ -20,6 +20,11 @@ const routes: Routes = [
             (m) => m.MovieDetailsModule
           ),
       },
+      {
+        path: 'myUpload',
+        loadChildren: () =>
+          import('../myUpload/myUpload.module').then((m) => m.MyUploadModule),
+      }
     ],
   },
 ];

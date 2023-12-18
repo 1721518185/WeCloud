@@ -17,6 +17,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/layout/layout.module').then((m) => m.LayoutModule),
   },
+  {
+    path:'myUpload',
+    loadChildren: () =>
+      import('./pages/myUpload/myUpload.module').then((m) => m.MyUploadModule),
+  },
   { path: '**', component: PageNotFoundComponent }, // Wildcard route for a 404 page
 ];
 
