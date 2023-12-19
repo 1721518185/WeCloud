@@ -112,10 +112,23 @@ export class MyUploadComponent implements OnInit {
         const url = blob.getElementsByTagName('Url')[0].textContent || '';
         const blobUrl = `${containerUrl}/${name}${this.extractSasToken()}`;
         const picTitle = name.split('_')[0].replace(`${this.containerName}/`, '');
-
+          const extension = name.split('.').pop() || '';
+          let type = '';
+          const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+          const audioExtensions = ['mp3', 'wav'];
+          const videoExtensions = ['mp4', 'avi'];
+          if (imageExtensions.includes(extension)) {
+            type = `image/${extension}`;
+          }else if (audioExtensions.includes(extension)) {
+            type = `audio/${extension}`;
+          }else if (videoExtensions.includes(extension)) {
+            type = `video/${extension}`;
+          }else {
+            type = 'application/octet-stream';
+          }
         this.images.push({
           url: url,
-          type: 'image/jpeg',
+          type: type,
           uploadTime: lastModified,
           blobUrl: blobUrl,
           picTitle: picTitle
