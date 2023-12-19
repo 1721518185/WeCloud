@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { MovieDetailsComponent } from './wegame-details.component';
-// import {FormatTimePipe} from "../../../pipe/formatTime.pipe";
+import {UploadList} from "../uploadList/uploadList.module";
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
+    UploadList,
     RouterModule.forChild([
       {
         path: '',

@@ -1,0 +1,17 @@
+
+
+<nz-row nzGutter="16">
+  <nz-col nzSpan="8" *ngFor="let item of images;let index = index">
+    <nz-card [nzHoverable]="true">
+      <nz-card-meta [title]="item.picTitle"></nz-card-meta>
+      <img *ngIf="item.type.startsWith('image')" [src]="item.url" alt="Uploaded Image" class="media"/>
+      <video *ngIf="item.type.startsWith('video')" [src]="item.url" controls class="media"></video>
+      <audio *ngIf="item.type.startsWith('audio')" [src]="item.url" controls class="media"></audio>
+      <nz-card-meta [nzTitle]="'Upload by ' + username" [nzDescription]="item.uploadTime| date:'medium'"></nz-card-meta>
+
+    </nz-card>
+    <button nz-button nzType="primary" [ngStyle]="{ marginRight: '8px' }" (click)="previewImage(item)">Preview</button>
+    <button nz-button nzType="primary" [ngStyle]="{ marginRight: '8px' }" (click)="downloadImage(item.url)">Download</button>
+    <button nz-button nzType="primary" nzDanger (click)="deleteImage(index)">Delete</button>
+  </nz-col>
+</nz-row>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
@@ -10,10 +10,11 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent implements OnInit {
+  @Input() uniqueGameName: string | '' | undefined;
   uploading = false;
   fileList: NzUploadFile[] = [];
   uploadTitle = '';
-  sasUrl = 'https://wecloudblob.blob.core.windows.net/?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2023-12-18T18:13:02Z&st=2023-12-18T10:13:02Z&spr=https,http&sig=pMEPhuudBIztt%2FjWBY%2BWIeGqWHN6BdYMAzUmGSy7PUU%3D';
+  sasUrl = 'https://wecloudblob.blob.core.windows.net/games?si=all&sv=2022-11-02&sr=c&sig=YU%2BMkvJqCF8%2FKQkAH2orl8%2FVzHWhUpZydluUfHfFZK0%3D';
   containerName = 'games';
   blobServiceClient: BlobServiceClient;
   containerClient: ContainerClient;
@@ -34,8 +35,13 @@ export class FileUploadComponent implements OnInit {
   };
 
   handleUpload(): void {
+     if (!this.uniqueGameName || this.uniqueGameName.trim() === '') {
+        this.$message.warning('Please select the media name before uploading.');
+        return;
+      }
+
     this.modalService.confirm({
-      nzTitle: 'Confirm Upload',
+      nzTitle: 'Please Confirm Your Upload',
       nzContent: `Title: ${this.uploadTitle}<br/>Number of files: ${this.fileList.length}`,
       nzOnOk: () => this.onConfirmUpload()
     });
@@ -43,13 +49,11 @@ export class FileUploadComponent implements OnInit {
 
   async onConfirmUpload() {
     this.uploading = true;
-    this.uploadTitle = ''; // Reset the title for the next upload
-
     for (const file of this.fileList) {
       const blob = new Blob([file as any], { type: file.type });
       await this.uploadFileToAzure(this.uploadTitle, file.name, blob);
     }
-
+    this.uploadTitle = '';
     this.fileList = [];
     this.uploading = false;
   }
@@ -66,7 +70,8 @@ export class FileUploadComponent implements OnInit {
 
   async uploadFileToAzure(uploadTitle: string, fileName: string, blob: Blob) {
     try {
-      const newFileName = `${uploadTitle}_${fileName}`;
+      const username = localStorage.getItem('username') as any;
+      const newFileName = `${uploadTitle}_${username}_${this.uniqueGameName}_${fileName}`;
       const blockBlobClient = this.containerClient.getBlockBlobClient(newFileName);
       await blockBlobClient.uploadData(blob);
       this.$message.success(`${fileName} uploaded successfully.`);

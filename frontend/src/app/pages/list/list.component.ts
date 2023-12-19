@@ -16,6 +16,8 @@ export class ListComponent implements OnInit {
   loading: boolean = true;
   isVisible: boolean = false;
   addForm!: FormGroup;
+  // the game name for upload media
+  uniqueGameName: string | '' | undefined;
   addField: any = [
     {
       label: 'Name',
@@ -108,6 +110,10 @@ export class ListComponent implements OnInit {
       Distributer: [null],
       Developer: [null],
     });
+    // @ts-ignore
+    this.addForm.get('Name').valueChanges.subscribe((value) => {
+      this.uniqueGameName = value;
+    });
     this.getWegameList(true);
   }
 
@@ -115,24 +121,7 @@ export class ListComponent implements OnInit {
     return JSON.parse(localStorage.getItem('names') || '[]');
   }
   submitForm(): void {
-    if (this.addForm.valid) {
-      let params = { ...this.addForm.value };
-      this.apiService.post('new_game', params).subscribe(
-        (res: any) => {
-          this.isVisible = false;
-          this.getWegameList();
-          this.$message.success(`add success!`);
-        },
-        () => {}
-      );
-    } else {
-      Object.values(this.addForm.controls).forEach((control: any) => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
+
   }
 
   onSearch() {
@@ -179,7 +168,6 @@ export class ListComponent implements OnInit {
             )[1];
           });
           this.total = total;
-          console.log('this.wegameList', this.wegameList);
           if (names) {
             localStorage.setItem('names', JSON.stringify(names));
           }

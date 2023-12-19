@@ -56,7 +56,7 @@ export class MovieDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.movieInfo = JSON.parse(localStorage.getItem('movieInfo') as any);
+    this.movieInfo = JSON.parse(localStorage.getItem('wegameInfo') as any);
     this.editForm = this.fb.group({
       Name: [null, [Validators.required]],
       Distributor: [null, [Validators.required]],
@@ -69,19 +69,6 @@ export class MovieDetailsComponent implements OnInit {
     });
   }
 
-  onDelete() {
-    this.apiService.post('del_game', { _id: this.movieInfo._id }).subscribe(
-      (res: any) => {
-        this.$message.success(`Delete ${this.movieInfo.Name} Success!`);
-        this.router.navigate(['/layout/list'], {});
-      },
-      () => {}
-    );
-  }
-  onEdit() {
-    this.isVisible = true;
-    this.editForm.patchValue(this.movieInfo);
-  }
   submitForm(): void {
     if (this.editForm.valid) {
       let params = { ...this.editForm.value, _id: this.movieInfo._id };
